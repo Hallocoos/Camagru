@@ -1,0 +1,9 @@
+.purp_body {
+	background-color: rgb(189, 114, 224);
+	background-size: 100%;
+}
+.center {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
