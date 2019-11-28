@@ -19,22 +19,6 @@
 	</style>
 </head>
 
-<body class="purp_body">
-	<section class="hero is-fullheight">
-		<div class="hero-body">
-			<div class="container has-text-centered">
-			<h1 class="title">Congratulations!</h1>
-			<h2 class="subtitle">You are now verified and can login to start you Madimgz journey to stardom</h2>
-				<figure class="image center">
-					<img src="./imgs/welcome.png" alt="Welcome" style="max-height: 600px; max-width:600px;">
-				</figure>
-			</div>
-		</div>
-	</section>
-	<?php
-	include "templates/footer.php";
-?>
-</body>
 <?php
 include './config/database.php';
 
@@ -44,17 +28,33 @@ if (isset($_GET['email']) && !empty($_GET['email']) and isset($_GET['token']) &&
 	$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	$email = ($_GET['email']); // Set email variable
 	$token = ($_GET['token']); // Set token variable
-}
 
 $search = $dbh->prepare("SELECT `email`, `token`, `verified` FROM `user` WHERE (`email`=? AND `token`=? AND `verified`=0)");
-if ($search->execute([$email, $token])) {
+$search->execute([$email, $token]);
+if ($search->rowCount() == 1) {
 	// We have a match, activate the account
-	$stmt = $dbh->prepare("UPDATE `user` SET `verified`=1 WHERE (`email`=? AND `token`=? AND `verified`=0)");
+	$stmt = $dbh->prepare("UPDATE `user` SET `verified`=2 WHERE (`email`=? AND `token`=? AND `verified`=0)");
 	$stmt->execute([$email, $token]);
-	echo '<div class="statusmsg">Your account has been activated, you can now login</div>';
+	echo '<body class="purp_body">
+	<section class="hero is-fullheight">
+		<div class="hero-body">
+			<div class="container has-text-centered">
+			<h1 class="title">Congratulations!</h1>
+			<h2 class="subtitle">You are now verified and can login to start your Madimgz journey to stardom</h2>
+				<figure class="image center">
+					<img src="./imgs/welcome.png" alt="Welcome" style="max-height: 600px; max-width:600px;">
+				</figure>
+			</div>
+		</div>
+	</section>
+	<?php
+	include "templates/footer.php";
+?>
+</body>';
 } else {
 	// No match -> invalid url or account has already been activated.
-	echo '<div class="statusmsg">The url is either invalid or you already have activated your account.</div>';
+	echo '<div class="statusmsg">The url is either invalid or you have already activated your account.</div>';
+}
 }
 ?>
 

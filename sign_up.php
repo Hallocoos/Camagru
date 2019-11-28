@@ -1,11 +1,11 @@
 <?php
-session_start();
-
-include "templates/header.php";
+    session_start();
+    include "templates/header.php";
+    include "./functions/verifyLoginDetails.php";
 ?>
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
     <title>Sign Up</title>
@@ -30,37 +30,36 @@ include "templates/header.php";
                                     <div class="field">
                                         <div class="control">
                                             <!-- REMOVE THE value="" -->
-                                            <input class="input" type="text" name="username" placeholder="Username" value="Hallocoos">
+                                            <input class="input" type="text" name="username" placeholder="Username">
                                         </div>
                                     </div>
                                     <div class="field">
                                         <div class="control">
                                             <!-- REMOVE THE value="" -->
-                                            <input class="input" type="text" name="email" placeholder="Email" value="wdv@live.co.za">
+                                            <input class="input" type="text" name="email" placeholder="Email">
                                         </div>
                                     </div>
                                     <div class="field">
                                         <div class="control">
                                             <!-- REMOVE THE value="" -->
-                                            <input class="input" type="password" name="password" placeholder="Password" value="12345678">
+                                            <input class="input" type="password" name="password" placeholder="Password">
                                         </div>
                                     </div>
                                     <div class="field">
                                         <div class="control">
                                             <!-- REMOVE THE value="" -->
-                                            <input class="input" type="password" name="repeatpassword" placeholder="Repeat Password" value="12345678">
+                                            <input class="input" type="password" name="repeatpassword" placeholder="Repeat Password">
                                         </div>
                                     </div>
                                     <div class="field is-grouped">
                                         <div class="control is-expanded">
-                                            <button type="submit" value="Submit" class="button is-primary is-fullwidth">Sign up!</button>
+                                            <button type="Submit" value="Submit" class="button is-primary is-fullwidth">Sign up!</button>
                                         </div>
                                     </div>
                                     <span>
                                         <?php
                                         if ($_SESSION['signup_success'] == TRUE) {
-											echo "Signup success please check your email.";
-											// we need to create a new page for this I think - so we can add a resend confirmation email link - C
+                                            echo "Signup success please check your email to verify your account. After account verification, you can set you account details in the settings section.";
                                             $_SESSION['error'] = NULL;
                                             $_SESSION['signup_success'] = NULL;
                                         } else if ($_SESSION['error'] !== NULL) {

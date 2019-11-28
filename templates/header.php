@@ -23,7 +23,7 @@
                     <img src="imgs/logo_rec.png" width="112" height="30" title="MadImgz">
                 </a>
 
-                <a role="button" class="navbar-burger burger" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
+                <a role="button" class="navbar-burger burger" onclick="document.querySelector('.navbar-menu').classList.toggle('is-active');" aria-label="menu" aria-expanded="false" data-target="navbarBasicExample">
                     <span aria-hidden="true"></span>
                     <span aria-hidden="true"></span>
                     <span aria-hidden="true"></span>
@@ -32,7 +32,7 @@
 
             <div id="navbarBasicExample" class="navbar-menu">
                 <div class="navbar-start">
-                    <a class="navbar-item" href="./gallery.php">
+                    <a class="navbar-item" href="./gallery.php?page=1">
                         Gallery
                     </a>
 
@@ -53,6 +53,18 @@
                             </a>
                         </div>
                     </div>
+                    <form action="forms/findUserProfile.php" method="post">
+                        <div class="navbar-item field has-addons center">
+                            <div class="control">
+                                <input class="input" type="text" name="username" placeholder="Find a user Profile">
+                            </div>
+                            <div class="control">
+                                <button class="button is-primary" type="submit" value="Submit">
+                                    Search
+                                </button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
                 <?php if (!isset($_SESSION['username'])) : ?>
                     <div class="navbar-end">
@@ -69,21 +81,29 @@
                     </div>
                 <?php endif; ?>
 				<?php if (isset($_SESSION['username'])) : ?>
-				<div class="navbar-dropdown">
+				<div class="navbar-item has-dropdown is-hoverable">
+                        <a class="navbar-link">
+                            <?php echo "Welcome ".$_SESSION['username']; ?>
+                        </a>
+						<div class="navbar-dropdown">
                             <a class="navbar-item" href="./account_settings.php">
                                 Account Settings
                             </a>
                             <a class="navbar-item" href="./editor.php">
                                 Create An Image
                             </a>
-                        </div>
+                            <a class="navbar-item" href="./user.php?name=<?php echo $_SESSION['username']?>">
+                                View My Profile
+                            </a>
+						</div>
+				</div>
                 <?php endif; ?>
                 <?php if (isset($_SESSION['username'])) : ?>
-                    <form action="signout.php">
+                    <form>
                         <div class="navbar-end">
                             <div class="navbar-item">
                                 <div class="buttons">
-                                    <a class="button is-primary" href="signout.php">
+                                    <a class="button is-primary" href="forms/signout.php">
                                         <strong>Sign Out</strong>
                                     </a>
                                 </div>

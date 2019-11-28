@@ -6,7 +6,7 @@
         // Connect to Mysql server
         $dbh = new PDO($DB_DSN_LIGHT, $DB_USER, $DB_PASSWORD);
         $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $sql = "CREATE DATABASE `".$DB_NAME."`";
+        $sql = "CREATE DATABASE `".$DB_NAME."`;";
         $dbh->exec($sql);
         echo "Database created successfully\n";
     } catch (PDOException $e) {
@@ -25,8 +25,8 @@
             `password` VARCHAR(255) NOT NULL,
             `email` VARCHAR(100) NOT NULL,
             `token` VARCHAR(32) NOT NULL,
-            `verified` BIT(1) NOT NULL DEFAULT 0,
-            `picturesource` VARCHAR(255)
+            `verified` INT(1) NOT NULL DEFAULT 0,
+            `picturesource` LONGTEXT
             )";
         $dbh->exec($sql);
         echo "Table user created successfully\n";
@@ -42,9 +42,9 @@
         $sql = "CREATE TABLE `image` (
             `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
             `userid` INT NOT NULL,
-            `source` VARCHAR(255) NOT NULL,
+            `source` LONGTEXT NOT NULL,
             `creationdate` DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
-            FOREIGN KEY (userid) REFERENCES user(id)
+            FOREIGN KEY (userid) REFERENCES user(id) ON DELETE CASCADE
             )";
         $dbh->exec($sql);
         echo "Table gallery created successfully\n";
@@ -61,8 +61,8 @@
             `id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
             `userid` INT(11) NOT NULL,
             `imageid` INT(11) NOT NULL,
-            FOREIGN KEY (userid) REFERENCES `user`(id),
-            FOREIGN KEY (imageid) REFERENCES `image`(id)
+            FOREIGN KEY (userid) REFERENCES `user`(id) ON DELETE CASCADE,
+            FOREIGN KEY (imageid) REFERENCES `image`(id) ON DELETE CASCADE
             )";
         $dbh->exec($sql);
         echo "Table like created successfully\n";
@@ -80,8 +80,8 @@
             `userid` INT NOT NULL,
             `imageid` INT NOT NULL,
             `text` VARCHAR(255) NOT NULL,
-            FOREIGN KEY (userid) REFERENCES user(id),
-            FOREIGN KEY (imageid) REFERENCES image(id)
+            FOREIGN KEY (userid) REFERENCES user(id) ON DELETE CASCADE,
+            FOREIGN KEY (imageid) REFERENCES image(id) ON DELETE CASCADE
             )";
         $dbh->exec($sql);
         echo "Table comment created successfully\n";
