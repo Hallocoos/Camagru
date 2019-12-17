@@ -52,6 +52,10 @@ include "./functions/editorFunctions.php";
 		.padding_left {
 			margin-left: 10px;
 		}
+
+		canvas {
+			max-width: 90%;
+		}
 	</style>
 </head>
 <?php if (isset($_SESSION['username'])) : ?>
@@ -74,23 +78,33 @@ include "./functions/editorFunctions.php";
 								Upload an image from your computer or take a picture with your webcam.
 								PRO TIP: make sure you click submit if uploading from your computer!
 							</h1>
-							<form method="post" enctype="multipart/form-data">
-								<input type="hidden" name="action" value="uploadUserImage">
+							<!-- User image upload -->
+							
 								<div class="field">
 									<div class="control">
-										<input class="input" type="file" name="image">`
+										<input class="input" id="upload_base" type="file" accept="image/*" style="display:none" onchange="userBaseImage(this.files[0])">
 									</div>
 								</div>
 								<div class="field">
-									<button type="submit" onclick="getUploadedImage()"class="button purp_body is-fullwidth" value="Submit" href="editor.php"><strong>Upload My Image!</strong></button>
+									<button type="button" id="file_select" class="button purp_body is-fullwidth" ><strong>Upload My Image!</strong></button>
 								</div>
-							</form>
+								<script>
+								const fileSelect = document.getElementById("file_select");
+								fileElem = document.getElementById("upload_base");
+
+								fileSelect.addEventListener("click", function(e) {
+									if (fileElem){
+										fileElem.click();
+									}
+								}, false);
+								</script>
 						</div>
 						<div class="padding_top">
 							<h1 class="title center">
 								OR
 							</h1>
 						</div>
+						<!-- Webcam Section -->
 						<div class="section">
 							<h1 class="subtitle">
 								directly take a picture with your webcam below:
@@ -102,13 +116,13 @@ include "./functions/editorFunctions.php";
 						<div class="container center">
 							<button id="stream" class="button padding_bot purp_body" onclick="getWebcamStream()">Switch On Webcam</button>
 						</div>
+						<!-- Canvases -->
+						
 						<div class="container center padding_top">
 							<canvas id="my_canvas" width="500" height="500" style="border:5px solid rgb(189, 114, 224);">
 							</canvas>
-							<canvas id="sticker_canvas1" width="500" height="500" style="position:absolute; border:5px solid rgb(189, 114, 224);">
+							<canvas id="sticker_canvas" width="500" height="500" style="position:absolute; border:5px solid rgb(189, 114, 224);">
 							</canvas>
-							<canvas id="sticker_canvas2" width="500" height="500" style="position:absolute; border:5px solid rgb(189, 114, 224);">
-							</canvas> 
 						</div>
 						<div class="center">
 						<button id="snap" class="button padding_top purp_body" onclick="getWebcamImage()">Take Picture</button>
@@ -118,6 +132,12 @@ include "./functions/editorFunctions.php";
 								<h1 class="subtitle">
 									Select an image from the provided images to decorate your chosen photo with:
 								</h1>
+
+								<script>
+
+								</script>
+								<!--Stickers -->
+								
 								<div class="field">
 									<div class="control">
 										<label class="checkbox">
@@ -143,22 +163,23 @@ include "./functions/editorFunctions.php";
 									</div>
 								</div>
 							</div>
-							<div class="section has-background-primary">
+							<!-- Submit form -->
+							
+							<div class="section has-background-primary" onmouseenter="checkCanvas()">
 								<p>
 									Once you have done both of the above, click on create and watch the magic happen!
 								</p>
-								<form action="functions/galleryFunctions.php" method="post" enctype="multipart/form-data">
-									<div class="field">
-										<button type="submit" class="button purp_body is-fullwidth" value="Submit" href="## where to go here?">
-											<strong> Create My Image! </strong>
+										<button disabled id="submit_image" type="button" class="button purp_body is-fullwidth" onclick="getImageDataUrl()">
+										<strong> Create My Image! </strong>
 										</button>
 									</div>
-								</form>
 							</div>
 							<div class="section">
 							</div>
 						</div>
 					</div>
+					<!-- User Images -->
+					
 					<div class="section has-background-primary has-text-centered pics_box overflow_pics">
 						<div class="subtitle"> Here are your previously uploaded pictures:</div>
 						<div class="field">

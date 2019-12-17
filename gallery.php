@@ -32,6 +32,7 @@ session_start();
 						$_SESSION['URI'] = $_SERVER['REQUEST_URI'];
 						// echo $_SESSION['URI'];
 						echo displayImages($_GET['page']);
+						// ini_set("display_errors", 1);
 					?>
 				</div>
   			</div>

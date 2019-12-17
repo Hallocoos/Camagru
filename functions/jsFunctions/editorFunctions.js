@@ -1,12 +1,16 @@
-function getUploadedImage(){
+function userBaseImage(files){  
 let myCanvas = document.getElementById("my_canvas");
 let myContext = myCanvas.getContext("2d");
-let $source = $_FILES['image'];
+
+const file = files;
+console.log(file);
+
 let img = new Image();
-img.src = $source;
+img.src = window.URL.createObjectURL(file);
 img.onload = () => {
-  myContext.drawImage(img, 0, 0);
+  myContext.drawImage(img, 0, 0, img.width, img.height, 0, 0, myCanvas.width, myCanvas.height);
   }
+
 }
 
 function getWebcamStream(){
@@ -42,12 +46,74 @@ function getWebcamImage(){
 
 }
 
-function getSticker($data){
-let sCanvas = document.getElementById("sticker_canvas1");
+function getSticker(data){
+let sCanvas = document.getElementById("sticker_canvas");
 let sContext = sCanvas.getContext("2d");
 let sticker = new Image();
-sticker.src = $data;
+sticker.src = data;
 sticker.onload = () => {
-  sContext.drawImage(sticker, 0, 0);
+  sContext.drawImage(sticker, 0, 0, sCanvas.width, sCanvas.height);
   }
+}
+
+//compare canvas dataurl to blank canvas dataurl
+
+function isCanvasBlank(canvas) {
+  const blank = document.createElement('canvas');
+
+  blank.width = canvas.width;
+  blank.height = canvas.height;
+
+  return canvas.toDataURL() === blank.toDataURL();
+}
+
+//undisable button if both canvases have content
+
+function checkCanvas(){
+
+  let canvas = document.getElementById('my_canvas');
+  let scanvas = document.getElementById('sticker_canvas');
+
+  if (isCanvasBlank(canvas) || isCanvasBlank(scanvas))
+  {
+    return 0;
+  }
+
+  else{
+    document.getElementById("submit_image").disabled = false;
+  }
+
+}
+
+function getImageDataUrl(){
+  let myCanvas = document.getElementById("my_canvas");
+  let imageDataUrl = encodeURIComponent(myCanvas.toDataURL());
+ 
+  let sCanvas = document.getElementById("sticker_canvas");
+  let stickerDataUrl = encodeURIComponent(sCanvas.toDataURL());
+
+  let url = "imagedata=" + imageDataUrl + "&stickerdata=" + stickerDataUrl;
+  let ajax = new XMLHttpRequest();
+  ajax.open('POST', 'functions/editorFunctions.php');
+  ajax.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+  ajax.onreadystatechange = function() {
+    console.log(ajax.responseText);
+ }
+
+  ajax.send(url);
+  
+ 
+    // Process our return data
+    console.log(ajax.status);
+	if (ajax.status < 300) {
+		// What do when the request is successful
+		console.log('success!', ajax);
+	} else {
+		// What do when the request fails
+		console.log('The request failed!');
+	}
+
+	// Code that should run regardless of the request status
+	console.log('This always runs...');
 }

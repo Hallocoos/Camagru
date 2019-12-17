@@ -8,14 +8,14 @@
         $dbh = new PDO($DB_DSN, $DB_USER, $DB_PASSWORD);
         $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        $stmnt = $dbh->prepare("SELECT * FROM user INNER JOIN image ON user.id = image.userid LIMIT ".htmlspecialchars($page * 5 - 5).", 5;");
+        $stmnt = $dbh->prepare("SELECT * FROM user INNER JOIN image ON user.id = image.userid ORDER BY `image`.`id` DESC LIMIT ".htmlspecialchars($page * 5 - 5).", 5;");
         $stmnt->execute();
         $result = $stmnt->fetchAll(PDO::FETCH_ASSOC);
         $count = $stmnt->rowCount();
         $string = "";
         
         foreach ($result as $image) {
-            $string = $string . "<div class='box'><img src='data:image;base64, " . $image['source'] . "' alt='error' class='image is-640x480 center'><br>";
+			$string = $string . "<div class='box'><img src='" . $image['source'] . "' alt='error' class='image is-640x480 center'><br>";
             if (isset($_SESSION['username']))
                 $string = $string . "<form action='forms/likes.php' method='post'><input type='hidden' name='imageid' value='".$image['id']
                     ."'><input type='hidden' name='userid' value='".$_SESSION['id']."'></input><button type='submit'>";
@@ -40,5 +40,5 @@
             else
                 $_SESSION['pagesleft'] = FALSE;
                 return ($string);
-        }
+		}
 ?>
